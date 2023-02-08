@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/dnd"
+            android:layout_width="30dp"
+            android:layout_weight="1"
+            android:layout_height="30dp"
+            style="@style/dnd" />
+
+        <EditText
+            android:id="@+id/prayer"
+            android:layout_width="220dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="@string/app_name"
+            android:textSize="48sp"
+            android:fontFamily="@font/jetbrains_light"
+            android:inputType="number"
+            style="@style/EditText"/>
+
+        <ImageView
+            android:id="@+id/star"
+            android:layout_width="30dp"
+            android:layout_weight="1"
+            android:layout_height="30dp"
+            style="@style/star" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <ListView
+            android:id="@+id/list_view"
+            android:dividerHeight="15dp"
+            android:layout_marginStart="?android:attr/listPreferredItemPaddingStart"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/go_webview"
+                android:text="@string/go"
+                android:textSize="20sp"
+                android:layout_width="60dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                style="@style/Button" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/go_default"
+                android:text="@string/def"
+                android:textSize="20sp"
+                android:layout_width="60dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                style="@style/Button" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginStart="?android:attr/listPreferredItemPaddingStart"
+        android:layout_marginEnd="?android:attr/listPreferredItemPaddingEnd"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/rhema"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10sp"
+            android:text="@string/google"
+            android:textSize="25sp"
+            android:fontFamily="@font/productsans_regular"
+            style="@style/border"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/history"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                style="@style/history" />
+
+            <ImageButton
+                android:id="@+id/copy"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                style="@style/copy" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
