@@ -29,11 +29,11 @@
             style="@style/EditText"/>
 
         <ImageView
-            android:id="@+id/star"
+            android:id="@+id/bookmark"
             android:layout_width="30dp"
             android:layout_weight="1"
             android:layout_height="30dp"
-            style="@style/star" />
+            style="@style/bookmark" />
 
     </LinearLayout>
 
@@ -77,50 +77,79 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_marginStart="?android:attr/listPreferredItemPaddingStart"
-        android:layout_marginEnd="?android:attr/listPreferredItemPaddingEnd"
-        android:layout_marginTop="20dp"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/rhema"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10sp"
-            android:text="@string/google"
-            android:textSize="25sp"
-            android:fontFamily="@font/productsans_regular"
-            style="@style/border"/>
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="?android:attr/listPreferredItemPaddingStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/history"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+            <EditText
+                android:id="@+id/rhema"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                style="@style/history" />
+                android:padding="10sp"
+                android:text="@string/default_website"
+                android:textSize="25sp"
+                android:fontFamily="@font/productsans_regular"
+                style="@style/border"/>
 
-            <ImageButton
-                android:id="@+id/copy"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                style="@style/copy" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/history"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    style="@style/history" />
+
+                <ImageButton
+                    android:id="@+id/bookmarks_library"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    style="@style/bookmarks_library" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:orientation="vertical">
 
-    <View
+            <ImageButton
+                android:id="@+id/copy"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                style="@style/copy" />
+
+            <ImageButton
+                android:id="@+id/settings"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                style="@style/settings"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+    </RelativeLayout>
 
 </LinearLayout>

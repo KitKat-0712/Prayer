@@ -1,13 +1,16 @@
 <resources>
     <string name="app_name">Prayer</string>
+    <string name="bookmark">Bookmark</string>
+    <string name="bookmarks_library">Bookmarks Library</string>
     <string name="go">GO</string>
     <string name="def">DEF</string>
     <string name="leave">Leave</string>
     <string name="previous">Previous</string>
+    <string name="next">Next</string>
     <string name="reload">Reload</string>
-    <string name="google">google.com</string>
-    <string name="nhentai_net">nhentai.net/g/%s</string>
-    <string name="nhentai_com">nhentai.com/g/%s</string>
-    <string name="nhentai_to">nhentai.to/g/%s</string>
-    <string name="pixiv">pixiv.net/artworks/%s</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="done">Done</string>
+    <string name="default_website">github.com</string>
+    <string name="websites.txt">websites.txt</string>
 </resources>

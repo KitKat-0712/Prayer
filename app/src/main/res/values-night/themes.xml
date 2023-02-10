@@ -30,17 +30,27 @@
         <item name="android:src">@drawable/dnd_daynight</item>
     </style>
 
-    <style name="star">
-        <item name="android:src">@drawable/star_daynight</item>
+    <style name="bookmark">
+        <item name="android:src">@drawable/bookmark_daynight</item>
+    </style>
+
+    <style name="bookmarks_library">
+        <item name="android:src">@drawable/bookmarks_library_daynight</item>
+        <item name="backgroundTint">@color/pink</item>
     </style>
 
     <style name="history">
-        <item name="android:src">@drawable/history_light</item>
+        <item name="android:src">@drawable/history_daynight</item>
         <item name="backgroundTint">@color/pink</item>
     </style>
 
     <style name="copy">
         <item name="android:src">@drawable/copy_daynight</item>
+        <item name="backgroundTint">@color/pink</item>
+    </style>
+
+    <style name="settings">
+        <item name="android:src">@drawable/settings_daynight</item>
         <item name="backgroundTint">@color/pink</item>
     </style>
 </resources>

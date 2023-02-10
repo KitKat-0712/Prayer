@@ -1,7 +1,6 @@
 package com.example.prayer
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,18 +12,18 @@ import androidx.annotation.Nullable
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
 
+class WebFragment(private val url: String) : Fragment() {
 
-class WebFragment(private val url: String = "google.com") : Fragment() {
-    private lateinit var mContext: Context
+    private lateinit var mainActivity: MainActivity
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        mainActivity = activity as MainActivity
         return inflater.inflate(R.layout.fragment_webview, container, false)
     }
 
     @SuppressLint("JavascriptInterface", "SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        mContext = activity as MainActivity
-        AdBlocker.init(mContext)
+        AdBlocker.init(mainActivity)
         val webView = view.findViewById<WebView>(R.id.web_view)
         val webSettings = webView.settings
 

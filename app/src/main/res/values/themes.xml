@@ -30,17 +30,27 @@
         <item name="android:src">@drawable/dnd_light</item>
     </style>
 
-    <style name="star">
-        <item name="android:src">@drawable/star_light</item>
+    <style name="bookmark">
+        <item name="android:src">@drawable/bookmark_light</item>
+    </style>
+
+    <style name="bookmarks_library">
+        <item name="android:src">@drawable/bookmarks_library_light</item>
+        <item name="backgroundTint">@color/blue</item>
     </style>
 
     <style name="history">
-        <item name="android:src">@drawable/history_daynight</item>
+        <item name="android:src">@drawable/history_light</item>
         <item name="backgroundTint">@color/blue</item>
     </style>
 
     <style name="copy">
         <item name="android:src">@drawable/copy_light</item>
+        <item name="backgroundTint">@color/blue</item>
+    </style>
+
+    <style name="settings">
+        <item name="android:src">@drawable/settings_light</item>
         <item name="backgroundTint">@color/blue</item>
     </style>
 </resources>

@@ -3,21 +3,22 @@ package com.example.prayer
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Bundle
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+
+const val defaultWebsite = "github.com"
+const val filesDir = "/data/user/0/com.example.prayer/files"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var notificationManager: NotificationManager
     private var originInterruptionFilter = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         originInterruptionFilter = notificationManager.currentInterruptionFilter
-        super.onCreate(savedInstanceState)
-        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         setContentView(R.layout.activity_main)
-        addFragments(HomeFragment(), WebFragment())
+        addFragments(HomeFragment(), WebFragment(defaultWebsite), BookmarksLibraryFragment())
     }
 
     private fun addFragments(vararg fragments: Fragment) {
@@ -38,5 +39,12 @@ class MainActivity : AppCompatActivity() {
         super.onStop()
         notificationManager.setInterruptionFilter(originInterruptionFilter)
         finish()
+    }
+    fun restart() {
+        finish()
+        startActivity(intent)
+    }
+    override fun onBackPressed() {
+        replaceNowFragmentWith(HomeFragment())
     }
 }
