@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="?android:attr/dialogPreferredPadding"
+    android:paddingEnd="?android:attr/dialogPreferredPadding"
+    android:paddingTop="?android:attr/dialogPreferredPadding">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:fontFamily="@font/productsans_regular"
+        android:textSize="30sp"
+        android:text="@string/bookmarks.txt"
+        android:layout_marginBottom="?android:attr/dialogPreferredPadding" />
+
+    <EditText
+        android:id="@+id/key_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="?android:attr/dialogPreferredPadding"
+        android:padding="10dp"
+        style="@style/border" />
+
+    <EditText
+        android:id="@+id/value_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:padding="10dp"
+        style="@style/border"/>
+
+</LinearLayout>

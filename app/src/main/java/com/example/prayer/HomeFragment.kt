@@ -24,37 +24,8 @@ import java.io.File
 
 val bookmarksKey = mutableListOf<String>() //數字 //adapter
 val bookmarksValue = mutableListOf<String>() // 附註
-fun readBookmarks() {
-    try {
-        val string = File(filesDir, "bookmarks.txt").readText().removeSuffix("\r")
-        val list = string.split('\n')
-        bookmarksKey.clear()
-        bookmarksValue.clear()
-        for(i in list) {
-            val tempList = i.split(';')
-            bookmarksKey.add(tempList[0])
-            bookmarksValue.add(tempList[1])
-        }
-    }
-    catch(_: Exception) {
-        File(filesDir, "bookmarks.txt").writeText("")
-        bookmarksKey.clear()
-        bookmarksValue.clear()
-    }
-}
-fun writeBookmarks() {
-    var string = ""
-    for(i in bookmarksKey.indices) {
-        string += "${bookmarksKey[i]};${bookmarksValue[i]}"
-        if(i != bookmarksKey.lastIndex) {
-            string += '\n'
-        }
-    }
-    File(filesDir, "bookmarks.txt").writeText(string)
-}
 
 class HomeFragment: Fragment() {
-
     private lateinit var notificationManager: NotificationManager
     private lateinit var mainActivity: MainActivity
     private lateinit var adapter: ArrayAdapter<String>
@@ -87,7 +58,7 @@ class HomeFragment: Fragment() {
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()){}.launch(intent)
         }
 
-        readBookmarks()
+        mainActivity.readBookmarks()
 
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
@@ -123,7 +94,7 @@ class HomeFragment: Fragment() {
                     bookmarkView.setImageResource(R.drawable.bookmark_on)
                     bookmarksKey.add(0,prayer)
                     bookmarksValue.add(0,commentView.text.toString())
-                    writeBookmarks()
+                    mainActivity.writeBookmarks()
                     prayerView.clearFocus()
                     hideSoftKeyboard(mainActivity, prayerView.windowToken)
                 }
@@ -132,7 +103,7 @@ class HomeFragment: Fragment() {
                 bookmarkView.setImageDrawable(originBookmark)
                 bookmarksKey.removeFirst()
                 bookmarksValue.removeFirst()
-                writeBookmarks()
+                mainActivity.writeBookmarks()
             }
         }
         bookmarkView.setOnLongClickListener {
@@ -158,7 +129,7 @@ class HomeFragment: Fragment() {
                 else { // edit
                     bookmarksValue[index] = commentView.text.toString()
                 }
-                writeBookmarks()
+                mainActivity.writeBookmarks()
                 prayerView.clearFocus()
                 hideSoftKeyboard(mainActivity, prayerView.windowToken)
             }
@@ -218,7 +189,6 @@ class HomeFragment: Fragment() {
         }
 
         readWebsites()
-
         listView = view.findViewById(R.id.list_view)
         adapter = object: ArrayAdapter<String>(mainActivity, R.layout.websites_list, adapterList) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -233,7 +203,6 @@ class HomeFragment: Fragment() {
                 radioButton.isChecked = (position == door)
                 radioButton.setOnClickListener {
                     door = position
-                    notifyDataSetChanged()
                     generateRhema()
                 }
                 radioButton.setOnLongClickListener {
@@ -261,8 +230,28 @@ class HomeFragment: Fragment() {
                 listItemView.setOnClickListener {
                     radioButton.isChecked = (position == door)
                     door = position
-                    notifyDataSetChanged()
                     generateRhema()
+                }
+                listItemView.setOnLongClickListener {
+                    val layout = View.inflate(mainActivity, R.layout.alertdialog_edit_websites, null)
+                    val editText = layout.findViewById<EditText>(R.id.edit_text)
+                    editText.setText(File(mainActivity.filesDir, "websites.txt").readText())
+
+                    AlertDialog.Builder(mainActivity).setCancelable(false).setView(layout)
+                        .setNeutralButton("Reset") { _, _ ->
+                            File(mainActivity.filesDir, "websites.txt").delete()
+                            readWebsites()
+                            mainActivity.restart()
+                        }
+                        .setNegativeButton("Cancel",null)
+                        .setPositiveButton("Done") { _, _ ->
+                            File(mainActivity.filesDir, "websites.txt").writeText(editText.text.toString())
+                            readWebsites()
+                            mainActivity.restart()
+                        }
+                        .show()
+
+                    return@setOnLongClickListener true
                 }
 
                 return listItemView
@@ -270,6 +259,7 @@ class HomeFragment: Fragment() {
         }
         listView.adapter = adapter
         view.findViewById<AppCompatButton>(R.id.go_webview).setOnClickListener {
+            isHomeFragment = false
             (activity as MainActivity).replaceNowFragmentWith(WebFragment(rhema))
         }
         view.findViewById<AppCompatButton>(R.id.go_default).setOnClickListener {
@@ -284,6 +274,7 @@ class HomeFragment: Fragment() {
             comingSoon()
         }
         view.findViewById<ImageButton>(R.id.bookmarks_library).setOnClickListener {
+            isHomeFragment = false
             mainActivity.replaceNowFragmentWith(BookmarksLibraryFragment())
         }
         view.findViewById<ImageView>(R.id.settings).setOnClickListener {
@@ -312,11 +303,10 @@ class HomeFragment: Fragment() {
                         break
                     }
                 }
-            else ->
-                if(doorSizeList[door][0] <= prayer.length && prayer.length <= doorSizeList[door][1]) {
-                    rhema = doorUrlList[door].replace("#",prayer)
-                    isPrayer = true
-                }
+            else -> {
+                rhema = doorUrlList[door].replace("#",prayer)
+                isPrayer = true
+            }
         }
 
         if(!isPrayer) {
@@ -352,8 +342,6 @@ class HomeFragment: Fragment() {
             Toast.makeText(mainActivity, "Due to websites.txt format error\nIt has been reset", Toast.LENGTH_LONG).show()
         }
     }
-
-
 
     private fun comingSoon() {
         Toast.makeText(mainActivity, "尚未開放ㄛ", Toast.LENGTH_SHORT).show()

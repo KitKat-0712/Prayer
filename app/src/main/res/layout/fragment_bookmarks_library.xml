@@ -11,7 +11,15 @@
         android:textSize="30sp"
         android:text="@string/bookmarks_library" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        style="@style/View" />
+
     <ListView
+        android:dividerHeight="5dp"
         android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

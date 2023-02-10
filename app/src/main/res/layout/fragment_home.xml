@@ -57,6 +57,7 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/go_webview"
+                android:fontFamily="@font/jetbrains_light"
                 android:text="@string/go"
                 android:textSize="20sp"
                 android:layout_width="60dp"
@@ -66,6 +67,7 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/go_default"
+                android:fontFamily="@font/jetbrains_light"
                 android:text="@string/def"
                 android:textSize="20sp"
                 android:layout_width="60dp"

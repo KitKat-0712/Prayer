@@ -13,4 +13,5 @@
     <string name="done">Done</string>
     <string name="default_website">github.com</string>
     <string name="websites.txt">websites.txt</string>
+    <string name="bookmarks.txt">bookmarks.txt</string>
 </resources>

@@ -5,9 +5,10 @@ import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import java.io.File
 
 const val defaultWebsite = "github.com"
-const val filesDir = "/data/user/0/com.example.prayer/files"
+var isHomeFragment = true
 
 class MainActivity : AppCompatActivity() {
     private lateinit var notificationManager: NotificationManager
@@ -28,7 +29,6 @@ class MainActivity : AppCompatActivity() {
             transAction.commit()
         }
     }
-
     fun replaceNowFragmentWith(fragment: Fragment) {
         val transAction = supportFragmentManager.beginTransaction()
         transAction.replace(R.id.fragment_container, fragment)
@@ -45,6 +45,41 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
     override fun onBackPressed() {
-        replaceNowFragmentWith(HomeFragment())
+        if(isHomeFragment) {
+            super.onBackPressed()
+        }
+        else {
+            isHomeFragment = true
+            replaceNowFragmentWith(HomeFragment())
+        }
+    }
+
+    fun readBookmarks() {
+        try {
+            val string = File(filesDir, "bookmarks.txt").readText().removeSuffix("\r")
+            val list = string.split('\n')
+            bookmarksKey.clear()
+            bookmarksValue.clear()
+            for(i in list) {
+                val tempList = i.split(';')
+                bookmarksKey.add(tempList[0])
+                bookmarksValue.add(tempList[1])
+            }
+        }
+        catch(_: Exception) {
+            File(filesDir, "bookmarks.txt").writeText("")
+            bookmarksKey.clear()
+            bookmarksValue.clear()
+        }
+    }
+    fun writeBookmarks() {
+        var string = ""
+        for(i in bookmarksKey.indices) {
+            string += "${bookmarksKey[i]};${bookmarksValue[i]}"
+            if(i != bookmarksKey.lastIndex) {
+                string += '\n'
+            }
+        }
+        File(filesDir, "bookmarks.txt").writeText(string)
     }
 }
