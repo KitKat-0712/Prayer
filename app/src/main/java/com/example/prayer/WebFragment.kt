@@ -19,8 +19,7 @@ class WebFragment(private val url: String): Fragment() {
         mainActivity = activity as MainActivity
         return inflater.inflate(R.layout.fragment_webview, container, false)
     }
-
-    @SuppressLint("JavascriptInterface", "SetJavaScriptEnabled")
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         AdBlocker.init(mainActivity)
         val webView = view.findViewById<WebView>(R.id.web_view)
@@ -39,7 +38,6 @@ class WebFragment(private val url: String): Fragment() {
         webView.loadUrl(url)
 
         view.findViewById<AppCompatButton>(R.id.leave).setOnClickListener {
-            isWebFragment = false
             (activity as MainActivity).replaceNowFragmentWith(HomeFragment())
         }
         view.findViewById<AppCompatButton>(R.id.previous).setOnClickListener {
@@ -51,7 +49,6 @@ class WebFragment(private val url: String): Fragment() {
             webView.reload()
         }
     }
-
     private class MyBrowser : WebViewClient() {
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
             view.loadUrl(url)

@@ -16,13 +16,19 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
-import com.example.custom.itLog
 import com.example.others.copyToClipboard
 import com.example.others.hideSoftKeyboard
 import com.example.others.pasteFromClipboard
 import com.example.others.showSoftKeyboard
 import java.io.File
+import java.io.FileNotFoundException
 
+val originWebsites = """
+            nhentai.net nhentai.net/g/# 6-6
+            nhentai.com nhentai.com/g/# 6-6
+            nhentai.to nhentai.to/g/# 6-6
+            Pixiv pixiv.net/artworks/# 8-10
+        """.trimIndent()
 val bookmarksKey = mutableListOf<String>() //數字 //adapter
 val bookmarksValue = mutableListOf<String>() // 附註
 var prayer = "" // 數字
@@ -37,12 +43,6 @@ class HomeFragment: Fragment() {
     private lateinit var prayerView: EditText
     private lateinit var rhemaView: EditText
 
-    private val originWebsites = """
-            nhentai.net nhentai.net/g/# 6-6
-            nhentai.com nhentai.com/g/# 6-6
-            nhentai.to nhentai.to/g/# 6-6
-            Pixiv pixiv.net/artworks/# 8-10
-        """.trimIndent()
     private val adapterList = mutableListOf<String>()
     private var doorReal = 0 // 絕對不是auto
     private var doorUrlList = mutableListOf(defaultWebsite)
@@ -191,7 +191,7 @@ class HomeFragment: Fragment() {
             }
         }
 
-        readWebsites()
+        doWebsites(reset=false, restart=false)
         listView = view.findViewById(R.id.list_view)
         adapter = object: ArrayAdapter<String>(mainActivity, R.layout.websites_list, adapterList) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -212,21 +212,19 @@ class HomeFragment: Fragment() {
                     generateRhema()
                 }
                 radioButton.setOnLongClickListener {
-                    val layout = View.inflate(mainActivity, R.layout.alertdialog_edit_websites, null)
+                    val layout = View.inflate(mainActivity, R.layout.alertdialog_edit_common, null)
                     val editText = layout.findViewById<EditText>(R.id.edit_text)
-                    editText.setText(File(mainActivity.filesDir, "websites.txt").readText())
+                    editText.setText(File(mainActivity.filesDir, "websites.txt").readText().removeSuffix("\r"))
+                    layout.findViewById<TextView>(R.id.title).text = getString(R.string.websites_txt)
 
                     AlertDialog.Builder(mainActivity).setCancelable(false).setView(layout)
                         .setNeutralButton("Reset") { _, _ ->
-                            File(mainActivity.filesDir, "websites.txt").delete()
-                            readWebsites()
-                            mainActivity.restart()
+                            doWebsites(reset = true, restart = true)
                         }
                         .setNegativeButton("Cancel",null)
                         .setPositiveButton("Done") { _, _ ->
                             File(mainActivity.filesDir, "websites.txt").writeText(editText.text.toString())
-                            readWebsites()
-                            mainActivity.restart()
+                            doWebsites(reset=false, restart = true)
                         }
                         .show()
 
@@ -238,8 +236,6 @@ class HomeFragment: Fragment() {
         }
         listView.adapter = adapter
         view.findViewById<AppCompatButton>(R.id.go_webview).setOnClickListener {
-            isHomeFragment = false
-            isWebFragment = true
             (activity as MainActivity).replaceNowFragmentWith(WebFragment(rhema))
         }
         view.findViewById<AppCompatButton>(R.id.go_default).setOnClickListener {
@@ -254,11 +250,25 @@ class HomeFragment: Fragment() {
             comingSoon()
         }
         view.findViewById<ImageButton>(R.id.bookmarks_library).setOnClickListener {
-            isHomeFragment = false
             mainActivity.replaceNowFragmentWith(BookmarksLibraryFragment())
         }
         view.findViewById<ImageView>(R.id.settings).setOnClickListener {
-            comingSoon()
+            val layout = View.inflate(mainActivity, R.layout.alertdialog_edit_common, null)
+            val editText = layout.findViewById<EditText>(R.id.edit_text)
+            editText.setText(File(mainActivity.filesDir, "config.txt").readText().removeSuffix("\r"))
+            layout.findViewById<TextView>(R.id.title).text = getString(R.string.config_txt)
+
+            AlertDialog.Builder(mainActivity).setCancelable(false).setView(layout)
+                .setNeutralButton("Reset") { _, _ ->
+                    File(mainActivity.filesDir, "config.txt").delete()
+                    mainActivity.doConfig(reset=true, restart=true)
+                }
+                .setNegativeButton("Cancel",null)
+                .setPositiveButton("Done") { _, _ ->
+                    File(mainActivity.filesDir, "config.txt").writeText(editText.text.toString())
+                    mainActivity.doConfig(reset=false, restart=true)
+                }
+                .show()
         }
         view.findViewById<View>(R.id.view).setOnClickListener {
             if(prayerView.text.toString() == "") {
@@ -294,32 +304,44 @@ class HomeFragment: Fragment() {
         }
         rhemaView.setText(rhema)
     }
-    private fun readWebsites() {
-        var string = originWebsites
-        try {
-            string = File(mainActivity.filesDir, "websites.txt").readText().removeSuffix("\r")
+    private fun doWebsites(reset:Boolean, restart: Boolean) {
+        if(reset) {
+            File(mainActivity.filesDir, "websites.txt").writeText(originWebsites)
+            Toast.makeText(mainActivity, "websites.txt has been reset", Toast.LENGTH_SHORT).show()
         }
-        catch(_: Exception) {
-            File(mainActivity.filesDir, "websites.txt").writeText(string)
-        }
+        else {
+            var noError = true
+            try {
+                val string = File(mainActivity.filesDir, "websites.txt").readText().removeSuffix("\r")
+                val list = string.split('\n')
 
-        try {
-            val list = string.split('\n')
+                adapterList.clear()
+                adapterList.add("AUTO")
+                for(i in list) {
+                    val splitList = i.split(' ')
+                    adapterList.add(splitList[0])
+                    doorUrlList.add(splitList[1])
 
-            adapterList.clear()
-            adapterList.add("AUTO")
-            for(i in list) {
-                val splitList = i.split(' ')
-                adapterList.add(splitList[0])
-                doorUrlList.add(splitList[1])
-
-                val sizeList = splitList[2].split('-')
-                doorSizeList.add(arrayOf(sizeList[0].toInt(), sizeList[1].toInt()))
+                    val sizeList = splitList[2].split('-')
+                    doorSizeList.add(arrayOf(sizeList[0].toInt(), sizeList[1].toInt()))
+                }
+            }
+            catch(e: Exception) {
+                File(mainActivity.filesDir, "websites.txt").writeText(originWebsites)
+                noError = false
+                if(e !is FileNotFoundException) {
+                    Toast.makeText(mainActivity, "Due to websites.txt format error\nIt has been reset", Toast.LENGTH_SHORT).show()
+                }
+            }
+            if(noError) {
+                if(restart) {
+                    Toast.makeText(mainActivity, "Success", Toast.LENGTH_SHORT).show()
+                }
             }
         }
-        catch(e: Exception) {
-            File(mainActivity.filesDir, "websites.txt").writeText(originWebsites)
-            Toast.makeText(mainActivity, "Due to websites.txt format error\nIt has been reset", Toast.LENGTH_LONG).show()
+
+        if(restart) {
+            mainActivity.restart()
         }
     }
 

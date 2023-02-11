@@ -3,7 +3,7 @@
     <string name="bookmark">Bookmark</string>
     <string name="bookmarks_library">Bookmarks Library</string>
     <string name="go">GO</string>
-    <string name="def">DEF</string>
+    <string name="def">DE</string>
     <string name="leave">Leave</string>
     <string name="previous">Previous</string>
     <string name="next">Next</string>
@@ -14,4 +14,5 @@
     <string name="default_website">github.com</string>
     <string name="websites.txt">websites.txt</string>
     <string name="bookmarks.txt">bookmarks.txt</string>
+    <string name="config.txt">config.txt</string>
 </resources>
