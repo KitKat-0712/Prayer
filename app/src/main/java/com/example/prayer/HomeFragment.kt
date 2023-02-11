@@ -16,6 +16,7 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
+import com.example.custom.itLog
 import com.example.others.copyToClipboard
 import com.example.others.hideSoftKeyboard
 import com.example.others.pasteFromClipboard
@@ -24,6 +25,9 @@ import java.io.File
 
 val bookmarksKey = mutableListOf<String>() //數字 //adapter
 val bookmarksValue = mutableListOf<String>() // 附註
+var prayer = "" // 數字
+var door = 0 // 可能是auto
+var rhema = defaultWebsite // 網址
 
 class HomeFragment: Fragment() {
     private lateinit var notificationManager: NotificationManager
@@ -40,9 +44,6 @@ class HomeFragment: Fragment() {
             Pixiv pixiv.net/artworks/# 8-10
         """.trimIndent()
     private val adapterList = mutableListOf<String>()
-    private var prayer = "" // 數字
-    private var rhema = defaultWebsite // 網址
-    private var door = 0 // 可能是auto
     private var doorReal = 0 // 絕對不是auto
     private var doorUrlList = mutableListOf(defaultWebsite)
     private var doorSizeList = mutableListOf(arrayOf(0,0))
@@ -64,6 +65,7 @@ class HomeFragment: Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         rhemaView = view.findViewById(R.id.rhema)
+        rhemaView.setText(rhema)
         rhemaView.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -138,6 +140,7 @@ class HomeFragment: Fragment() {
         }
 
         prayerView = view.findViewById(R.id.prayer)
+        prayerView.setText(prayer)
         prayerView.addTextChangedListener(object: TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -202,37 +205,13 @@ class HomeFragment: Fragment() {
 
                 radioButton.isChecked = (position == door)
                 radioButton.setOnClickListener {
+                    if(door != position) {
+                        listView.getChildAt(door).findViewById<RadioButton>(R.id.radio_button).isChecked = false
+                    }
                     door = position
                     generateRhema()
                 }
                 radioButton.setOnLongClickListener {
-                    val layout = View.inflate(mainActivity, R.layout.alertdialog_edit_websites, null)
-                    val editText = layout.findViewById<EditText>(R.id.edit_text)
-                    editText.setText(File(mainActivity.filesDir, "websites.txt").readText())
-
-                    AlertDialog.Builder(mainActivity).setCancelable(false).setView(layout)
-                        .setNeutralButton("Reset") { _, _ ->
-                            File(mainActivity.filesDir, "websites.txt").delete()
-                            readWebsites()
-                            mainActivity.restart()
-                        }
-                        .setNegativeButton("Cancel",null)
-                        .setPositiveButton("Done") { _, _ ->
-                            File(mainActivity.filesDir, "websites.txt").writeText(editText.text.toString())
-                            readWebsites()
-                            mainActivity.restart()
-                        }
-                        .show()
-
-                    return@setOnLongClickListener true
-                }
-
-                listItemView.setOnClickListener {
-                    radioButton.isChecked = (position == door)
-                    door = position
-                    generateRhema()
-                }
-                listItemView.setOnLongClickListener {
                     val layout = View.inflate(mainActivity, R.layout.alertdialog_edit_websites, null)
                     val editText = layout.findViewById<EditText>(R.id.edit_text)
                     editText.setText(File(mainActivity.filesDir, "websites.txt").readText())
@@ -260,6 +239,7 @@ class HomeFragment: Fragment() {
         listView.adapter = adapter
         view.findViewById<AppCompatButton>(R.id.go_webview).setOnClickListener {
             isHomeFragment = false
+            isWebFragment = true
             (activity as MainActivity).replaceNowFragmentWith(WebFragment(rhema))
         }
         view.findViewById<AppCompatButton>(R.id.go_default).setOnClickListener {

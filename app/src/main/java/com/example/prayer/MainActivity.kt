@@ -9,6 +9,7 @@ import java.io.File
 
 const val defaultWebsite = "github.com"
 var isHomeFragment = true
+var isWebFragment = false
 
 class MainActivity : AppCompatActivity() {
     private lateinit var notificationManager: NotificationManager
@@ -35,10 +36,14 @@ class MainActivity : AppCompatActivity() {
         transAction.commit()
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
         notificationManager.setInterruptionFilter(originInterruptionFilter)
-        finish()
+        if(isWebFragment) {
+            isHomeFragment = true
+            isWebFragment = false
+            finish()
+        }
+        super.onPause()
     }
     fun restart() {
         finish()
@@ -50,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         }
         else {
             isHomeFragment = true
+            isWebFragment = false
             replaceNowFragmentWith(HomeFragment())
         }
     }

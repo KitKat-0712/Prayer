@@ -11,7 +11,7 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 
-class BookmarksLibraryFragment : Fragment() {
+class BookmarksLibraryFragment: Fragment() {
     private lateinit var mainActivity: MainActivity
     private lateinit var adapter: ArrayAdapter<String>
 

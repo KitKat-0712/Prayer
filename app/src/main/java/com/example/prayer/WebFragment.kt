@@ -12,8 +12,7 @@ import androidx.annotation.Nullable
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
 
-class WebFragment(private val url: String) : Fragment() {
-
+class WebFragment(private val url: String): Fragment() {
     private lateinit var mainActivity: MainActivity
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -40,6 +39,7 @@ class WebFragment(private val url: String) : Fragment() {
         webView.loadUrl(url)
 
         view.findViewById<AppCompatButton>(R.id.leave).setOnClickListener {
+            isWebFragment = false
             (activity as MainActivity).replaceNowFragmentWith(HomeFragment())
         }
         view.findViewById<AppCompatButton>(R.id.previous).setOnClickListener {
