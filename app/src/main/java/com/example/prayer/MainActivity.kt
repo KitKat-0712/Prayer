@@ -15,8 +15,6 @@ val defaultConfig = """
         enable_override_onPause=1
     """.trimIndent()
 const val defaultWebsite = "github.com"
-var isNowHomeFragment = true
-var isNowWebFragment = false
 
 class MainActivity: AppCompatActivity() {
     private lateinit var notificationManager: NotificationManager
@@ -50,23 +48,15 @@ class MainActivity: AppCompatActivity() {
         val transAction = supportFragmentManager.beginTransaction()
         transAction.replace(R.id.fragment_container, fragment)
         transAction.commit()
-
-        isNowHomeFragment = false
-        if(fragment is HomeFragment) {
-            isNowHomeFragment = true
-            isNowWebFragment = false
-        }
-
-        if(fragment is WebFragment) {
-            isNowWebFragment = true
-            isNowHomeFragment = false
-        }
+    }
+    fun getCurrentFragment(): Fragment {
+        return supportFragmentManager.findFragmentById(R.id.fragment_container)!!
     }
 
     override fun onPause() {
         notificationManager.setInterruptionFilter(originInterruptionFilter)
         if(enableOverrideOnPause) {
-            if(isNowWebFragment) {
+            if(getCurrentFragment() is WebFragment) {
                 replaceNowFragmentWith(HomeFragment())
             }
         }
@@ -77,7 +67,7 @@ class MainActivity: AppCompatActivity() {
         startActivity(intent)
     }
     override fun onBackPressed() {
-        if(isNowHomeFragment) {
+        if(getCurrentFragment() is HomeFragment) {
             super.onBackPressed()
         }
         else {

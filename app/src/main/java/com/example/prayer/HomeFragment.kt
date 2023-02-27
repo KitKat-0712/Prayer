@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
 import com.example.others.copyToClipboard
@@ -200,18 +201,22 @@ class HomeFragment: Fragment() {
                     listItemView = LayoutInflater.from(mainActivity).inflate(R.layout.websites_list, parent, false)
                 }
 
-                val radioButton = listItemView!!.findViewById<RadioButton>(R.id.radio_button)
-                radioButton.text = getItem(position)
+                val appCompatButton = listItemView!!.findViewById<AppCompatButton>(R.id.button)
+                appCompatButton.text = getItem(position)
 
-                radioButton.isChecked = (position == door)
-                radioButton.setOnClickListener {
+                if(position == door) {
+                    appCompatButton.background = AppCompatResources.getDrawable(mainActivity, R.drawable.websites_button_daynight)
+                }
+
+                appCompatButton.setOnClickListener {
                     if(door != position) {
-                        listView.getChildAt(door).findViewById<RadioButton>(R.id.radio_button).isChecked = false
+                        listView.getChildAt(door).findViewById<AppCompatButton>(R.id.button).background = AppCompatResources.getDrawable(mainActivity, R.drawable.websites_button_daynight)
                     }
                     door = position
+                    listView.getChildAt(door).findViewById<AppCompatButton>(R.id.button).background = AppCompatResources.getDrawable(mainActivity, R.drawable.websites_button_daynight)
                     generateRhema()
                 }
-                radioButton.setOnLongClickListener {
+                appCompatButton.setOnLongClickListener {
                     val layout = View.inflate(mainActivity, R.layout.alertdialog_edit_common, null)
                     val editText = layout.findViewById<EditText>(R.id.edit_text)
                     editText.setText(File(mainActivity.filesDir, "websites.txt").readText().removeSuffix("\r"))

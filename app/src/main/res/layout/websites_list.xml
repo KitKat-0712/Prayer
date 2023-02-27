@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RadioButton
-        android:id="@+id/radio_button"
-        android:textSize="28sp"
+    <androidx.appcompat.widget.AppCompatButton
+        style="@style/websites"
+        android:id="@+id/button"
+        android:textSize="20sp"
         android:fontFamily="@font/productsans_regular"
-        android:paddingStart="8dp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
 </LinearLayout>

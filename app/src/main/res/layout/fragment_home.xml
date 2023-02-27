@@ -44,11 +44,13 @@
 
         <ListView
             android:id="@+id/list_view"
-            android:dividerHeight="15dp"
-            android:layout_marginStart="?android:attr/listPreferredItemPaddingStart"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="?android:attr/listPreferredItemPaddingStart"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="?android:attr/listPreferredItemPaddingEnd"
             android:layout_weight="2"
-            android:layout_height="wrap_content"/>
+            android:dividerHeight="15dp" />
 
         <LinearLayout
             android:layout_width="60dp"
